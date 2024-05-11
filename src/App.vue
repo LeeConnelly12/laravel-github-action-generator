@@ -1,11 +1,22 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { Form } from '@/types/Form'
+import { Output } from '@/types/Output'
 import { stringify } from 'yaml'
+import { set } from 'lodash-es'
 
 const form = ref<Form>({
   name: 'my workflow',
-  triggers: [],
+  triggers: [
+    {
+      enabled: false,
+      type: 'on push',
+    },
+    {
+      enabled: false,
+      type: 'on pull request',
+    },
+  ],
   database: 'mysql',
   database_version: 8.0,
   php_version: 8.3,
@@ -16,9 +27,23 @@ const form = ref<Form>({
 })
 
 const yaml = computed(() => {
-  return {
+  const output: Output = {
     name: form.value.name,
   }
+
+  form.value.triggers
+    .filter((trigger) => trigger.enabled)
+    .forEach((trigger) => {
+      if (trigger.type == 'on push') {
+        set(output, 'on.push.branches', ['main'])
+      }
+
+      if (trigger.type == 'on pull request') {
+        set(output, 'on.pull_request.branches', ['main'])
+      }
+    })
+
+  return stringify(output)
 })
 </script>
 
@@ -41,32 +66,17 @@ const yaml = computed(() => {
       <div class="mt-6">
         <p>Triggers</p>
         <div class="mt-3 grid gap-3">
-          <label class="flex items-center gap-2">
+          <label
+            v-for="trigger in form.triggers"
+            class="flex items-center gap-2"
+          >
             <input
+              v-model="trigger.enabled"
               type="checkbox"
-              name="triggers"
-              value="on_push"
+              :value="true"
               id="on_push"
             />
-            <span>On push</span>
-          </label>
-          <label class="flex items-center gap-2">
-            <input
-              type="checkbox"
-              name="triggers"
-              value="on_pull_request"
-              id="on_pull_request"
-            />
-            <span>On pull request</span>
-          </label>
-          <label class="flex items-center gap-2">
-            <input
-              type="checkbox"
-              name="triggers"
-              value="on_schedule"
-              id="on_schedule"
-            />
-            <span>On schedule</span>
+            <span>{{ trigger.type }}</span>
           </label>
         </div>
       </div>
@@ -103,10 +113,10 @@ const yaml = computed(() => {
         </select>
       </div>
       <div class="mt-6">
-        <label for="node_versions">Node versions</label>
+        <label for="node_version">Node version</label>
         <select
-          name="node_versions"
-          id="node_versions"
+          name="node_version"
+          id="node_version"
           class="mt-2 w-full rounded-md border border-gray-200 shadow-sm"
         >
           <option value="20">20</option>
@@ -149,10 +159,8 @@ const yaml = computed(() => {
         </select>
       </div>
     </form>
-    <div
-      class="mt-6 w-full rounded-md border border-gray-200 bg-white px-3 py-4 shadow-sm"
-    >
-      <p>{{ stringify(yaml) }}</p>
-    </div>
+    <pre
+      class="mt-6 w-full rounded-md border border-gray-200 bg-white px-4 py-4 shadow-sm"
+    ><code>{{ yaml }}</code></pre>
   </main>
 </template>

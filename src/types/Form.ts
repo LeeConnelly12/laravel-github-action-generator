@@ -1,10 +1,15 @@
-type Trigger = 'on_push' | 'on_pull_request' | 'on_schedule'
+type TriggerType = 'on push' | 'on pull request'
+
+interface Trigger {
+  type: TriggerType
+  enabled: boolean
+}
 
 type Test = 'phpunit' | 'pest'
 
 type StaticAnalysisTool = 'larastan' | 'phpstan'
 
-type Form = {
+interface Form {
   name: string
   triggers: Trigger[]
   database: 'mysql'
