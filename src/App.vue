@@ -161,6 +161,6 @@ const yaml = computed(() => {
     </form>
     <pre
       class="mt-6 w-full rounded-md border border-gray-200 bg-white px-4 py-4 shadow-sm"
-    ><code>{{ yaml }}</code></pre>
+    ><code class="font-fira-code">{{ yaml }}</code></pre>
   </main>
 </template>

@@ -8,6 +8,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Open Sans', ...defaultTheme.fontFamily.sans],
+        'fira-code': 'Fira Code',
       },
     },
   },

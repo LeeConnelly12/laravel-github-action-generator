@@ -18,4 +18,12 @@
     font-style: normal;
     font-display: swap;
   }
+
+  @font-face {
+    font-family: 'Fira Code';
+    src: url('/fonts/fira-code-regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
 }
