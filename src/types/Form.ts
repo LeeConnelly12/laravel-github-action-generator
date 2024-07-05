@@ -10,8 +10,8 @@ interface Form {
   database_version: '8.0'
   php_version: '8.3' | '8.2' | '8.1' | '8.0'
   node_version: 20
-  test: 'phpunit' | 'pest'
-  static_analysis: 'larastan' | 'phpstan'
+  test: null | 'phpunit' | 'pest'
+  static_analysis: null | 'larastan' | 'phpstan'
 }
 
 export type { Form, Trigger }

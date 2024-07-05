@@ -21,7 +21,7 @@ export function useYamlOutput() {
     php_version: '8.3',
     node_version: 20,
     test: 'phpunit',
-    static_analysis: 'larastan',
+    static_analysis: null,
   })
 
   const getTriggers = (triggers: Form['triggers']) => {
@@ -86,6 +86,10 @@ export function useYamlOutput() {
   }
 
   const getTest = (test: Form['test']) => {
+    if (!test) {
+      return []
+    }
+
     return [
       {
         name: 'Run Tests',
@@ -97,7 +101,11 @@ export function useYamlOutput() {
     ]
   }
 
-  const getStaticAnalysis = () => {
+  const getStaticAnalysis = (staticAnalysis: Form['static_analysis']) => {
+    if (!staticAnalysis) {
+      return []
+    }
+
     return [
       {
         name: 'Run Static Analysis',
@@ -115,7 +123,7 @@ export function useYamlOutput() {
         ...getPhpVersion(form.value.php_version),
         ...getNodeVersion(form.value.node_version),
         ...getTest(form.value.test),
-        ...getStaticAnalysis(),
+        ...getStaticAnalysis(form.value.static_analysis),
       ],
     })
   })

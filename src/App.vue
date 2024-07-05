@@ -84,6 +84,10 @@ const { form, yaml } = useYamlOutput()
           <p>Test</p>
           <div class="mt-3 grid gap-3">
             <label class="flex items-center gap-2">
+              <input v-model="form.test" type="radio" :value="null" />
+              <span>None</span>
+            </label>
+            <label class="flex items-center gap-2">
               <input v-model="form.test" type="radio" value="phpunit" />
               <span>PHPUnit</span>
             </label>
@@ -96,6 +100,14 @@ const { form, yaml } = useYamlOutput()
         <div class="mt-6">
           <p>Static analysis</p>
           <div class="mt-3 grid gap-3">
+            <label class="flex items-center gap-2">
+              <input
+                v-model="form.static_analysis"
+                type="radio"
+                :value="null"
+              />
+              <span>None</span>
+            </label>
             <label class="flex items-center gap-2">
               <input
                 v-model="form.static_analysis"
