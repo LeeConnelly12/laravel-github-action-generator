@@ -1,50 +1,7 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { Form } from '@/types/Form'
-import { Output } from '@/types/Output'
-import { stringify } from 'yaml'
-import { set } from 'lodash-es'
+import { useYamlOutput } from '@/composable/useYamlOutput'
 
-const form = ref<Form>({
-  name: 'my workflow',
-  triggers: [
-    {
-      enabled: false,
-      type: 'on push',
-    },
-    {
-      enabled: false,
-      type: 'on pull request',
-    },
-  ],
-  database: 'mysql',
-  database_version: 8.0,
-  php_version: 8.3,
-  node_version: 20,
-  tests: [],
-  static_analysis: [],
-  deployment: 'digital_ocean',
-})
-
-const yaml = computed(() => {
-  const output: Output = {
-    name: form.value.name,
-  }
-
-  form.value.triggers
-    .filter((trigger) => trigger.enabled)
-    .forEach((trigger) => {
-      if (trigger.type == 'on push') {
-        set(output, 'on.push.branches', ['main'])
-      }
-
-      if (trigger.type == 'on pull request') {
-        set(output, 'on.pull_request.branches', ['main'])
-      }
-    })
-
-  return stringify(output)
-})
+const { form, yaml } = useYamlOutput()
 </script>
 
 <template>
@@ -84,7 +41,7 @@ const yaml = computed(() => {
         <div class="mt-6">
           <label for="database">Database</label>
           <select
-            name="database"
+            v-model="form.database"
             id="database"
             class="mt-2 w-full rounded-md border border-gray-200 shadow-sm"
           >
@@ -94,7 +51,7 @@ const yaml = computed(() => {
         <div class="mt-6">
           <label for="mysql_version">MySQL version</label>
           <select
-            name="mysql_version"
+            v-model="form.database_version"
             id="mysql_version"
             class="mt-2 w-full rounded-md border border-gray-200 shadow-sm"
           >
@@ -104,7 +61,7 @@ const yaml = computed(() => {
         <div class="mt-6">
           <label for="php_version">PHP version</label>
           <select
-            name="php_version"
+            v-model="form.php_version"
             id="php_version"
             class="mt-2 w-full rounded-md border border-gray-200 shadow-sm"
           >
@@ -116,7 +73,7 @@ const yaml = computed(() => {
         <div class="mt-6">
           <label for="node_version">Node version</label>
           <select
-            name="node_version"
+            v-model="form.node_version"
             id="node_version"
             class="mt-2 w-full rounded-md border border-gray-200 shadow-sm"
           >
@@ -124,14 +81,14 @@ const yaml = computed(() => {
           </select>
         </div>
         <div class="mt-6">
-          <p>Tests</p>
+          <p>Test</p>
           <div class="mt-3 grid gap-3">
             <label class="flex items-center gap-2">
-              <input type="checkbox" name="tests" value="phpunit" />
+              <input v-model="form.test" type="radio" value="phpunit" />
               <span>PHPUnit</span>
             </label>
             <label class="flex items-center gap-2">
-              <input type="checkbox" name="tests" value="pest" />
+              <input v-model="form.test" type="radio" value="pest" />
               <span>Pest</span>
             </label>
           </div>
@@ -140,24 +97,22 @@ const yaml = computed(() => {
           <p>Static analysis</p>
           <div class="mt-3 grid gap-3">
             <label class="flex items-center gap-2">
-              <input type="checkbox" name="static_analysis" value="larastan" />
+              <input
+                v-model="form.static_analysis"
+                type="radio"
+                value="larastan"
+              />
               <span>Larastan</span>
             </label>
             <label class="flex items-center gap-2">
-              <input type="checkbox" name="static_analysis" value="phpstan" />
+              <input
+                v-model="form.static_analysis"
+                type="radio"
+                value="phpstan"
+              />
               <span>PHPStan</span>
             </label>
           </div>
-        </div>
-        <div class="mt-6">
-          <label for="deployment">Deployment</label>
-          <select
-            name="deployment"
-            id="deployment"
-            class="mt-2 w-full rounded-md border border-gray-200 shadow-sm"
-          >
-            <option value="digital_ocean">Digital Ocean</option>
-          </select>
         </div>
       </form>
       <pre
