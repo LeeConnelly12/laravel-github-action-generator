@@ -148,7 +148,7 @@ const copy = () => {
         <button
           @click="copy"
           type="button"
-          class="absolute right-8 top-5 inline-flex gap-1 rounded-full bg-blue-500 py-2 pl-3 pr-4 font-sans font-bold text-white"
+          class="absolute right-8 top-5 inline-flex gap-1 rounded-full bg-blue-500 py-2 pl-3 pr-4 font-sans font-bold text-white hover:bg-opacity-85"
         >
           <svg viewBox="0 0 24 24" fill="currentColor" class="size-6">
             <title>Copy to clipboard</title>
