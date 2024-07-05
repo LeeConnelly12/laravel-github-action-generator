@@ -42,7 +42,7 @@ export function useYamlOutput() {
     return output
   }
 
-  const getDatabase = (database: Form['database']) => {
+  const getDatabase = () => {
     return {
       services: {
         mysql: {
@@ -118,7 +118,7 @@ export function useYamlOutput() {
     return stringify({
       name: form.value.name,
       ...getTriggers(form.value.triggers),
-      ...getDatabase(form.value.database),
+      ...getDatabase(),
       steps: [
         ...getPhpVersion(form.value.php_version),
         ...getNodeVersion(form.value.node_version),
