@@ -21,23 +21,21 @@ const { form, yaml } = useYamlOutput()
             placeholder="Enter name"
           />
         </div>
-        <div class="mt-6">
-          <p>Triggers</p>
-          <div class="mt-3 grid gap-3">
-            <label
-              v-for="trigger in form.triggers"
-              class="flex items-center gap-2"
-            >
-              <input
-                v-model="trigger.enabled"
-                type="checkbox"
-                :value="true"
-                id="on_push"
-              />
-              <span>{{ trigger.type }}</span>
-            </label>
+        <fieldset class="mt-6">
+          <legend>Triggers</legend>
+          <div
+            v-for="trigger in form.triggers"
+            class="mt-3 flex items-center gap-2"
+          >
+            <input
+              v-model="trigger.enabled"
+              type="checkbox"
+              :value="true"
+              :id="trigger.type"
+            />
+            <label :for="trigger.type">{{ trigger.label }}</label>
           </div>
-        </div>
+        </fieldset>
         <div class="mt-6">
           <label for="database">Database</label>
           <select
@@ -80,44 +78,46 @@ const { form, yaml } = useYamlOutput()
             <option value="20">20</option>
           </select>
         </div>
-        <div class="mt-6">
-          <p>Test</p>
-          <div class="mt-3 grid gap-3">
-            <label class="flex items-center gap-2">
-              <input v-model="form.test" type="radio" :value="null" />
-              <span>None</span>
-            </label>
-            <label class="flex items-center gap-2">
-              <input v-model="form.test" type="radio" value="phpunit" />
-              <span>PHPUnit</span>
-            </label>
-            <label class="flex items-center gap-2">
-              <input v-model="form.test" type="radio" value="pest" />
-              <span>Pest</span>
-            </label>
+        <fieldset class="mt-6">
+          <legend>Test</legend>
+          <div class="mt-3 flex items-center gap-2">
+            <input
+              v-model="form.test"
+              type="radio"
+              :value="null"
+              id="no_test"
+            />
+            <label for="no_test">None</label>
           </div>
-        </div>
-        <div class="mt-6">
-          <p>Static analysis</p>
-          <div class="mt-3 grid gap-3">
-            <label class="flex items-center gap-2">
-              <input
-                v-model="form.static_analysis"
-                type="radio"
-                :value="null"
-              />
-              <span>None</span>
-            </label>
-            <label class="flex items-center gap-2">
-              <input
-                v-model="form.static_analysis"
-                type="radio"
-                value="larastan"
-              />
-              <span>Larastan</span>
-            </label>
+          <div class="flex items-center gap-2">
+            <input
+              v-model="form.test"
+              type="radio"
+              value="phpunit"
+              id="phpunit"
+            />
+            <label for="phpunit">PHPUnit</label>
           </div>
-        </div>
+          <div class="flex items-center gap-2">
+            <input v-model="form.test" type="radio" value="pest" id="pest" />
+            <label for="pest">Pest</label>
+          </div>
+        </fieldset>
+        <fieldset class="mt-6">
+          <legend>Static analysis</legend>
+          <div class="mt-3 flex items-center gap-2">
+            <input v-model="form.static_analysis" type="radio" :value="null" />
+            <label for="no_static_analysis">None</label>
+          </div>
+          <div class="flex items-center gap-2">
+            <input
+              v-model="form.static_analysis"
+              type="radio"
+              value="larastan"
+            />
+            <label for="larastan">Larastan</label>
+          </div>
+        </fieldset>
       </form>
       <pre
         class="mt-6 w-full rounded-md border border-gray-200 bg-white px-4 py-4 shadow-sm lg:mt-0"

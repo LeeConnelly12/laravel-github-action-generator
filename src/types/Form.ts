@@ -1,5 +1,6 @@
 interface Trigger {
-  type: 'on push' | 'on pull request'
+  label: 'on push' | 'on pull request'
+  type: 'on_push' | 'on_pull_request'
   enabled: boolean
 }
 

@@ -9,11 +9,13 @@ export function useYamlOutput() {
     triggers: [
       {
         enabled: false,
-        type: 'on push',
+        type: 'on_push',
+        label: 'on push',
       },
       {
         enabled: false,
-        type: 'on pull request',
+        type: 'on_pull_request',
+        label: 'on pull request',
       },
     ],
     database: 'mysql',
@@ -30,11 +32,11 @@ export function useYamlOutput() {
     triggers
       .filter((trigger) => trigger.enabled)
       .forEach((trigger) => {
-        if (trigger.type === 'on push') {
+        if (trigger.label === 'on push') {
           set(output, 'on.push.branches', ['main'])
         }
 
-        if (trigger.type === 'on pull request') {
+        if (trigger.label === 'on pull request') {
           set(output, 'on.pull_request.branches', ['main'])
         }
       })
