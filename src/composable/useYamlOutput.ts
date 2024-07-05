@@ -44,11 +44,11 @@ export function useYamlOutput() {
     return output
   }
 
-  const getDatabase = () => {
+  const getDatabase = (databaseVersion: string) => {
     return {
       services: {
         mysql: {
-          image: 'mysql:latest',
+          image: `mysql:${databaseVersion}`,
           env: {
             MYSQL_ALLOW_EMPTY_PASSWORD: 'yes',
             MYSQL_DATABASE: 'db_test_laravel',
@@ -120,7 +120,7 @@ export function useYamlOutput() {
     return stringify({
       name: form.value.name,
       ...getTriggers(form.value.triggers),
-      ...getDatabase(),
+      ...getDatabase(form.value.database_version),
       steps: [
         ...getPhpVersion(form.value.php_version),
         ...getNodeVersion(form.value.node_version),
