@@ -160,7 +160,7 @@ const copy = () => {
   </main>
   <a
     href="https://github.com/LeeConnelly12/laravel-github-action-generator"
-    class="fixed right-10 top-6"
+    class="fixed right-10 top-6 hidden sm:block"
   >
     <Github />
   </a>
