@@ -11,7 +11,7 @@ interface Form {
   php_version: '8.3' | '8.2' | '8.1' | '8.0'
   node_version: 20
   test: null | 'phpunit' | 'pest'
-  static_analysis: null | 'larastan' | 'phpstan'
+  static_analysis: null | 'larastan'
 }
 
 export type { Form, Trigger }

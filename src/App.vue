@@ -116,14 +116,6 @@ const { form, yaml } = useYamlOutput()
               />
               <span>Larastan</span>
             </label>
-            <label class="flex items-center gap-2">
-              <input
-                v-model="form.static_analysis"
-                type="radio"
-                value="phpstan"
-              />
-              <span>PHPStan</span>
-            </label>
           </div>
         </div>
       </form>
