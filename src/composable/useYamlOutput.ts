@@ -88,7 +88,9 @@ export function useYamlOutput() {
   }
 
   const getEnv = (database: Form['database']) => {
-    const output = {}
+    const output = {
+      env: {},
+    }
 
     if (database === 'mysql') {
       output.env = {
@@ -200,7 +202,7 @@ export function useYamlOutput() {
 
     return [
       {
-        name: 'Run Tests',
+        name: 'Run tests',
         run:
           test === 'phpunit'
             ? 'vendor/bin/phpunit --testdox%'
