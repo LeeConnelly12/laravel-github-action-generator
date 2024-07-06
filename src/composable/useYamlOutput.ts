@@ -63,6 +63,17 @@ export function useYamlOutput() {
     }
   }
 
+  const getEnv = () => {
+    return {
+      env: {
+        DB_CONNECTION: 'mysql',
+        DB_DATABASE: 'db_test_laravel',
+        DB_PORT: '33306',
+        DB_USER: 'root',
+      },
+    }
+  }
+
   const getPhpVersion = (phpVersion: Form['php_version']) => {
     return [
       {
@@ -75,6 +86,38 @@ export function useYamlOutput() {
     ]
   }
 
+  const cachePhpDependencies = () => {
+    return [
+      {
+        name: 'Cache PHP dependencies',
+        uses: 'actions/cache@v4',
+        with: {
+          path: `vendor\n~/.composer/cache`,
+          key: `\${{ runner.os }}-php-\${{ hashFiles('**/composer.lock') }}`,
+          'restore-keys': `\${{ runner.os }}-php-`,
+        },
+      },
+    ]
+  }
+
+  const installDependencies = () => {
+    return [
+      {
+        name: 'Install Dependencies',
+        run: 'composer install --no-interaction --prefer-dist --optimize-autoloader',
+      },
+    ]
+  }
+
+  const prepareApplicationEnvironment = () => {
+    return [
+      {
+        name: 'Prepare Application Environment',
+        run: `cp .env.example .env\nphp artisan key:generate\nchmod -R 755 storage bootstrap/cache`,
+      },
+    ]
+  }
+
   const getNodeVersion = (nodeVersion: Form['node_version']) => {
     return [
       {
@@ -83,6 +126,33 @@ export function useYamlOutput() {
         with: {
           'node-version': `${nodeVersion}`,
         },
+      },
+    ]
+  }
+
+  const installNodeDependencies = () => {
+    return [
+      {
+        name: 'Install Node dependencies',
+        run: 'npm ci',
+      },
+    ]
+  }
+
+  const buildAssets = () => {
+    return [
+      {
+        name: 'Build assets',
+        run: 'npm run build',
+      },
+    ]
+  }
+
+  const migrateDatabase = () => {
+    return [
+      {
+        name: 'Migrate Database',
+        run: 'php artisan migrate',
       },
     ]
   }
@@ -117,17 +187,29 @@ export function useYamlOutput() {
   }
 
   const yaml = computed(() => {
-    return stringify({
-      name: form.value.name,
-      ...getTriggers(form.value.triggers),
-      ...getDatabase(form.value.database_version),
-      steps: [
-        ...getPhpVersion(form.value.php_version),
-        ...getNodeVersion(form.value.node_version),
-        ...getTest(form.value.test),
-        ...getStaticAnalysis(form.value.static_analysis),
-      ],
-    })
+    return stringify(
+      {
+        name: form.value.name,
+        ...getTriggers(form.value.triggers),
+        ...getDatabase(form.value.database_version),
+        ...getEnv(),
+        steps: [
+          ...getPhpVersion(form.value.php_version),
+          ...cachePhpDependencies(),
+          ...installDependencies(),
+          ...prepareApplicationEnvironment(),
+          ...getNodeVersion(form.value.node_version),
+          ...installNodeDependencies(),
+          ...buildAssets(),
+          ...migrateDatabase(),
+          ...getTest(form.value.test),
+          ...getStaticAnalysis(form.value.static_analysis),
+        ],
+      },
+      {
+        singleQuote: true,
+      },
+    )
   })
 
   return {

@@ -15,7 +15,7 @@ const copy = () => {
     <h1 class="text-center text-xl md:text-3xl">
       <strong class="text-red-500">Laravel</strong> Github action generator
     </h1>
-    <div class="gap-8 lg:mt-8 lg:grid lg:grid-cols-[2fr_3fr]">
+    <div class="gap-8 lg:mt-8 lg:grid lg:grid-cols-[2fr_3fr] xl:h-[53rem]">
       <form class="mt-6 lg:mt-0">
         <div>
           <label for="name">Name</label>
@@ -143,9 +143,11 @@ const copy = () => {
           </div>
         </fieldset>
       </form>
-      <div class="relative">
+      <div
+        class="relative mt-6 overflow-x-auto rounded-md border border-gray-200 bg-white px-4 py-4 shadow-sm lg:mt-0"
+      >
         <pre
-          class="relative mt-6 h-full w-full overflow-x-auto rounded-md border border-gray-200 bg-white px-4 py-4 shadow-sm lg:mt-0"
+          class="h-full w-full"
         ><code class="font-fira-code">{{ yaml }}</code></pre>
         <button
           @click="copy"
