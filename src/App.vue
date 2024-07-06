@@ -99,7 +99,7 @@ const copy = () => {
               id="no_test"
               class="size-5 border-gray-200 shadow-sm"
             />
-            <label for="no_test">None</label>
+            <label for="no_test">No tests</label>
           </div>
           <div class="mt-3 flex items-center gap-2">
             <input
@@ -129,15 +129,17 @@ const copy = () => {
               v-model="form.static_analysis"
               type="radio"
               :value="null"
+              id="no_static_analysis"
               class="size-5 border-gray-200 shadow-sm"
             />
-            <label for="no_static_analysis">None</label>
+            <label for="no_static_analysis">No static analysis</label>
           </div>
           <div class="mt-3 flex items-center gap-2">
             <input
               v-model="form.static_analysis"
               type="radio"
               value="larastan"
+              id="larastan"
               class="size-5 border-gray-200 shadow-sm"
             />
             <label for="larastan">Larastan</label>
