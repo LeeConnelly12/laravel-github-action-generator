@@ -8,7 +8,7 @@
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist --cname actiongenerator.dev"
   },
   "dependencies": {
     "lodash-es": "^4.17.21",
