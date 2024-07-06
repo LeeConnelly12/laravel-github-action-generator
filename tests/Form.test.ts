@@ -30,12 +30,16 @@ test('selecting triggers generates the correct YAML', async () => {
   )
 })
 
-test('selecting a database version generates the correct YAML', async () => {
-  const select = screen.getByLabelText('MySQL version')
+test('selecting a database generates the correct YAML', async () => {
+  const select = screen.getByLabelText('Database')
 
-  await fireEvent.update(select, '5.7')
+  await fireEvent.update(select, 'postgres')
 
-  screen.getByText(/services:\s+mysql:\s+image: mysql:5.7/i)
+  screen.getByText(/services:\s+pgsql:\s+image: postgres:15/i)
+
+  await fireEvent.update(select, 'mysql')
+
+  screen.getByText(/services:\s+mysql:\s+image: mysql:8.0/i)
 })
 
 test('selecting a PHP version generates the correct YAML', async () => {

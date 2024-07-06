@@ -53,6 +53,7 @@ const copy = () => {
             class="mt-2 w-full rounded-md border border-gray-200 shadow-sm"
           >
             <option value="mysql">MySQL</option>
+            <option value="postgres">Postgres</option>
           </select>
         </div>
         <div class="mt-6">

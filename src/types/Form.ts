@@ -7,7 +7,7 @@ interface Trigger {
 interface Form {
   name: string
   triggers: Trigger[]
-  database: 'mysql'
+  database: 'mysql' | 'postgres'
   php_version: '8.3' | '8.2' | '8.1' | '8.0'
   node_version: '18' | '20'
   test: null | 'phpunit' | 'pest'

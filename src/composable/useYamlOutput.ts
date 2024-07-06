@@ -57,31 +57,57 @@ export function useYamlOutput() {
   }
 
   const getDatabase = (database: Form['database']) => {
-    return {
-      services: {
-        mysql: {
-          image: 'mysql:8.0',
-          env: {
-            MYSQL_ALLOW_EMPTY_PASSWORD: 'yes',
-            MYSQL_DATABASE: 'db_test_laravel',
-          },
-          ports: ['33306:3306'],
-          options:
-            '--health-cmd="mysqladmin ping"\n--health-interval=10s\n--health-timeout=5s\n--health-retries=3%',
+    const output = {}
+
+    if (database === 'mysql') {
+      set(output, 'services.mysql', {
+        image: 'mysql:8.0',
+        ports: ['33306:3306'],
+        env: {
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes',
+          MYSQL_DATABASE: 'db_test_laravel',
         },
-      },
+        options:
+          '--health-cmd="mysqladmin ping"\n--health-interval=10s\n--health-timeout=5s\n--health-retries=3%',
+      })
+    } else if (database === 'postgres') {
+      set(output, 'services.pgsql', {
+        image: 'postgres:15',
+        ports: ['55432:5432'],
+        env: {
+          POSTGRES_USER: 'postgres',
+          POSTGRES_PASSWORD: 'postgres',
+          POSTGRES_DB: 'db_test_laravel',
+        },
+        options:
+          '--health-cmd pg_isready\n--health-interval 10s\n--health-timeout 5s\n--health-retries 5%',
+      })
     }
+
+    return output
   }
 
-  const getEnv = () => {
-    return {
-      env: {
+  const getEnv = (database: Form['database']) => {
+    const output = {}
+
+    if (database === 'mysql') {
+      output.env = {
         DB_CONNECTION: 'mysql',
         DB_DATABASE: 'db_test_laravel',
         DB_PORT: '33306',
         DB_USER: 'root%',
-      },
+      }
+    } else if (database === 'postgres') {
+      output.env = {
+        DB_CONNECTION: 'pgsql',
+        DB_DATABASE: 'db_test_laravel',
+        DB_PORT: '55432',
+        DB_USERNAME: 'postgres',
+        DB_PASSWORD: 'postgres%',
+      }
     }
+
+    return output
   }
 
   const getPhpVersion = (phpVersion: Form['php_version']) => {
@@ -205,8 +231,8 @@ export function useYamlOutput() {
           tests: {
             name: 'Run tests',
             'runs-on': 'ubuntu-latest',
-            ...getDatabase(),
-            ...getEnv(),
+            ...getDatabase(form.value.database),
+            ...getEnv(form.value.database),
             steps: [
               ...getPhpVersion(form.value.php_version),
               ...cachePhpDependencies(),
