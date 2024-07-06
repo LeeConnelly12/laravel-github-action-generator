@@ -67,10 +67,8 @@ export function useYamlOutput() {
             MYSQL_DATABASE: 'db_test_laravel',
           },
           ports: ['33306:3306'],
-          healthcheck: {
-            retries: 3,
-            timeout: '5s%',
-          },
+          options:
+            '--health-cmd="mysqladmin ping"\n--health-interval=10s\n--health-timeout=5s\n--health-retries=3%',
         },
       },
     }
