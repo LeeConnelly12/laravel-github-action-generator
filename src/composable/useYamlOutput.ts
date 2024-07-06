@@ -21,7 +21,7 @@ export function useYamlOutput() {
     database: 'mysql',
     database_version: '8.0',
     php_version: '8.3',
-    node_version: 20,
+    node_version: '20',
     test: 'phpunit',
     static_analysis: null,
   })

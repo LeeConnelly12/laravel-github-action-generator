@@ -10,7 +10,7 @@ interface Form {
   database: 'mysql'
   database_version: '8.0'
   php_version: '8.3' | '8.2' | '8.1' | '8.0'
-  node_version: 20
+  node_version: '18' | '20'
   test: null | 'phpunit' | 'pest'
   static_analysis: null | 'larastan'
 }

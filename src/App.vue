@@ -86,6 +86,7 @@ const copy = () => {
             class="mt-2 w-full rounded-md border border-gray-200 shadow-sm"
           >
             <option value="20">20</option>
+            <option value="18">18</option>
           </select>
         </div>
         <fieldset class="mt-6">
