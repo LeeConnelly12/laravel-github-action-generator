@@ -26,18 +26,31 @@ export function useYamlOutput() {
     static_analysis: null,
   })
 
+  const getName = (name: Form['name']) => {
+    return {
+      name: name + '%',
+    }
+  }
+
   const getTriggers = (triggers: Form['triggers']) => {
     const output = {}
+
+    const enabledBothTriggers =
+      triggers.filter((trigger) => trigger.enabled).length === 2
 
     triggers
       .filter((trigger) => trigger.enabled)
       .forEach((trigger) => {
         if (trigger.label === 'on push') {
-          set(output, 'on.push.branches', ['main'])
+          set(output, 'on.push.branches', [
+            !enabledBothTriggers ? 'main%' : 'main',
+          ])
         }
 
         if (trigger.label === 'on pull request') {
-          set(output, 'on.pull_request.branches', ['main'])
+          set(output, 'on.pull_request.branches', [
+            enabledBothTriggers ? 'main%' : 'main',
+          ])
         }
       })
 
@@ -56,7 +69,7 @@ export function useYamlOutput() {
           ports: ['33306:3306'],
           healthcheck: {
             retries: 3,
-            timeout: '5s',
+            timeout: '5s%',
           },
         },
       },
@@ -69,7 +82,7 @@ export function useYamlOutput() {
         DB_CONNECTION: 'mysql',
         DB_DATABASE: 'db_test_laravel',
         DB_PORT: '33306',
-        DB_USER: 'root',
+        DB_USER: 'root%',
       },
     }
   }
@@ -80,7 +93,7 @@ export function useYamlOutput() {
         uses: 'actions/checkout@v4',
         name: 'Set up PHP',
         with: {
-          'php-version': `${phpVersion}`,
+          'php-version': `${phpVersion}%`,
         },
       },
     ]
@@ -94,7 +107,7 @@ export function useYamlOutput() {
         with: {
           path: `vendor\n~/.composer/cache`,
           key: `\${{ runner.os }}-php-\${{ hashFiles('**/composer.lock') }}`,
-          'restore-keys': `\${{ runner.os }}-php-`,
+          'restore-keys': `\${{ runner.os }}-php-%`,
         },
       },
     ]
@@ -104,7 +117,7 @@ export function useYamlOutput() {
     return [
       {
         name: 'Install Dependencies',
-        run: 'composer install --no-interaction --prefer-dist --optimize-autoloader',
+        run: 'composer install --no-interaction --prefer-dist --optimize-autoloader%',
       },
     ]
   }
@@ -113,7 +126,7 @@ export function useYamlOutput() {
     return [
       {
         name: 'Prepare Application Environment',
-        run: `cp .env.example .env\nphp artisan key:generate\nchmod -R 755 storage bootstrap/cache`,
+        run: `cp .env.example .env\nphp artisan key:generate\nchmod -R 755 storage bootstrap/cache%`,
       },
     ]
   }
@@ -124,7 +137,7 @@ export function useYamlOutput() {
         uses: 'actions/setup-node@v4',
         name: 'Set up Node.js',
         with: {
-          'node-version': `${nodeVersion}`,
+          'node-version': `${nodeVersion}%`,
         },
       },
     ]
@@ -134,7 +147,7 @@ export function useYamlOutput() {
     return [
       {
         name: 'Install Node dependencies',
-        run: 'npm ci',
+        run: 'npm ci%',
       },
     ]
   }
@@ -143,7 +156,7 @@ export function useYamlOutput() {
     return [
       {
         name: 'Build assets',
-        run: 'npm run build',
+        run: 'npm run build%',
       },
     ]
   }
@@ -152,7 +165,7 @@ export function useYamlOutput() {
     return [
       {
         name: 'Migrate Database',
-        run: 'php artisan migrate',
+        run: 'php artisan migrate%',
       },
     ]
   }
@@ -167,8 +180,8 @@ export function useYamlOutput() {
         name: 'Run Tests',
         run:
           test === 'phpunit'
-            ? 'vendor/bin/phpunit --testdox'
-            : 'vendor/bin/pest --parallel',
+            ? 'vendor/bin/phpunit --testdox%'
+            : 'vendor/bin/pest --parallel%',
       },
     ]
   }
@@ -189,10 +202,12 @@ export function useYamlOutput() {
   const yaml = computed(() => {
     return stringify(
       {
-        name: form.value.name,
+        ...getName(form.value.name),
         ...getTriggers(form.value.triggers),
         jobs: {
           tests: {
+            name: 'Run tests',
+            'runs-on': 'ubuntu-latest',
             ...getDatabase(form.value.database_version),
             ...getEnv(),
             steps: [
@@ -213,7 +228,7 @@ export function useYamlOutput() {
       {
         singleQuote: true,
       },
-    )
+    ).replaceAll('%', '\n')
   })
 
   return {
