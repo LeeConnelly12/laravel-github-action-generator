@@ -19,7 +19,6 @@ export function useYamlOutput() {
       },
     ],
     database: 'mysql',
-    database_version: '8.0',
     php_version: '8.3',
     node_version: '20',
     test: 'phpunit',
@@ -57,11 +56,11 @@ export function useYamlOutput() {
     return output
   }
 
-  const getDatabase = (databaseVersion: string) => {
+  const getDatabase = (database: Form['database']) => {
     return {
       services: {
         mysql: {
-          image: `mysql:${databaseVersion}`,
+          image: 'mysql:8.0',
           env: {
             MYSQL_ALLOW_EMPTY_PASSWORD: 'yes',
             MYSQL_DATABASE: 'db_test_laravel',
@@ -206,7 +205,7 @@ export function useYamlOutput() {
           tests: {
             name: 'Run tests',
             'runs-on': 'ubuntu-latest',
-            ...getDatabase(form.value.database_version),
+            ...getDatabase(),
             ...getEnv(),
             steps: [
               ...getPhpVersion(form.value.php_version),

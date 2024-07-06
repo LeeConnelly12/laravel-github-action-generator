@@ -56,17 +56,6 @@ const copy = () => {
           </select>
         </div>
         <div class="mt-6">
-          <label for="mysql_version">MySQL version</label>
-          <select
-            v-model="form.database_version"
-            id="mysql_version"
-            class="mt-2 w-full rounded-md border border-gray-200 shadow-sm"
-          >
-            <option value="8.0">8.0</option>
-            <option value="5.7">5.7</option>
-          </select>
-        </div>
-        <div class="mt-6">
           <label for="php_version">PHP version</label>
           <select
             v-model="form.php_version"
