@@ -67,13 +67,13 @@ test('selecting a way to test generates the correct YAML', async () => {
 
   await fireEvent.click(phpunit)
 
-  screen.getByText(/name: Run Tests\s+run: vendor\/bin\/phpunit --testdox/i)
+  screen.getByText(/name: Run tests\s+run: vendor\/bin\/phpunit --testdox/i)
 
   const pest = screen.getByRole('radio', { name: 'Pest' })
 
   await fireEvent.click(pest)
 
-  screen.getByText(/name: Run Tests\s+run: vendor\/bin\/pest --parallel/i)
+  screen.getByText(/name: Run tests\s+run: vendor\/bin\/pest --parallel/i)
 })
 
 test('selecting static analysis generates the correct YAML', async () => {
