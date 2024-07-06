@@ -191,20 +191,24 @@ export function useYamlOutput() {
       {
         name: form.value.name,
         ...getTriggers(form.value.triggers),
-        ...getDatabase(form.value.database_version),
-        ...getEnv(),
-        steps: [
-          ...getPhpVersion(form.value.php_version),
-          ...cachePhpDependencies(),
-          ...installDependencies(),
-          ...prepareApplicationEnvironment(),
-          ...getNodeVersion(form.value.node_version),
-          ...installNodeDependencies(),
-          ...buildAssets(),
-          ...migrateDatabase(),
-          ...getTest(form.value.test),
-          ...getStaticAnalysis(form.value.static_analysis),
-        ],
+        jobs: {
+          tests: {
+            ...getDatabase(form.value.database_version),
+            ...getEnv(),
+            steps: [
+              ...getPhpVersion(form.value.php_version),
+              ...cachePhpDependencies(),
+              ...installDependencies(),
+              ...prepareApplicationEnvironment(),
+              ...getNodeVersion(form.value.node_version),
+              ...installNodeDependencies(),
+              ...buildAssets(),
+              ...migrateDatabase(),
+              ...getTest(form.value.test),
+              ...getStaticAnalysis(form.value.static_analysis),
+            ],
+          },
+        },
       },
       {
         singleQuote: true,
